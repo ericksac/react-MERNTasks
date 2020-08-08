@@ -1,7 +1,7 @@
 import React from 'react'
 import Proyecto from './Proyecto'
 import proyectoContext from '../../context/proyectos/proyectoContext'
-import { useContext,useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 
 const ListadoProyectos = () => {
 
@@ -14,7 +14,7 @@ const ListadoProyectos = () => {
     //obtenere proyectos ucando carge el componente
     useEffect(()=>{
         obtenerProyectos();
-    }, []);
+    }, );
 
     if(proyectos.length === 0) return null;
 
