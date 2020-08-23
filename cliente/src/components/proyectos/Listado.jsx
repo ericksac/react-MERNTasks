@@ -3,33 +3,44 @@ import Proyecto from './Proyecto'
 import proyectoContext from '../../context/proyectos/proyectoContext'
 import { useContext, useEffect } from 'react'
 
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+
 const ListadoProyectos = () => {
 
 
     //Extraer proeyctos de state inicial
 
     const proyectosContext = useContext(proyectoContext);
-    const {proyectos, obtenerProyectos} = proyectosContext;
+    const { proyectos, obtenerProyectos } = proyectosContext;
 
     //obtenere proyectos ucando carge el componente
-    useEffect(()=>{
+    useEffect(() => {
         obtenerProyectos();
-    }, );
 
-    if(proyectos.length === 0) return null;
+        //eslint-disable-next-line
+    }, []);
+
+    if (proyectos.length === 0) return <p>No hay proyectos, comienza creando uno</p>;
 
 
     return (
-       <ul className="listado-proyectos">
-           {
-               proyectos.map(proyecto =>(
-                   <Proyecto
-                        key={proyecto.id}
-                        proyecto={proyecto}
-                   />
-               ))
-           }
-       </ul>
+        <ul className="listado-proyectos">
+            <TransitionGroup>
+                {
+                    proyectos.map(proyecto => (
+                        <CSSTransition
+                            key={proyecto.id}
+                            timeout={200}
+                            classNames="proyecto"
+                        >
+                            <Proyecto
+                                proyecto={proyecto}
+                            />
+                        </CSSTransition>
+                    ))
+                }
+            </TransitionGroup>
+        </ul>
     )
 }
 
