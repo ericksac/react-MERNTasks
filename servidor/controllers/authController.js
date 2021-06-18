@@ -17,7 +17,6 @@ exports.autenticarUsuario = async (req, res) => {
     if (!usuario) {
       return res.status(400).json({ msg: "El usuario no existe" });
     }
-
     const passCorrecto = await bcryptjs.compare(password, usuario.password);
     if (!passCorrecto) {
       return res.status(400).json({ msg: "Password Incorrecto" });
@@ -47,3 +46,15 @@ exports.autenticarUsuario = async (req, res) => {
     console.log(error);
   }
 };
+
+//Obtiene que usuario está autenticado
+exports.usuarioAutenticado = async (req, res) =>{
+  try {
+    const usuario = await Usuario.findById(req.usuario.id).select('-password');
+    res.json({usuario})
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({msg: 'Hubo un error'});
+    
+  }
+}

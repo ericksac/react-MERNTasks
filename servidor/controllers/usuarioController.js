@@ -24,7 +24,7 @@ exports.crearUsuario = async (req, res) => {
         usuario = new Usuario (req.body);
         
         const salt  = await bcryptjs.genSaltSync(10);
-        usuario.password =  await bcryptjs.hashSync(password, salt);
+        usuario.password =  await bcryptjs.hashSync(password.toString(), salt);
         
         await usuario.save();
 

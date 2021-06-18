@@ -1,7 +1,29 @@
-import React, {useState} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {Link} from 'react-router-dom'
+import AlertaContext from '../../context/alertas/alertaContext'
+import AuthContext from '../../context/autentificacion/authContext'
 
-const NuevaCuenta = () => {
+const NuevaCuenta = ( props ) => {
+
+    //extraer los valores del context
+    const alertaContext = useContext(AlertaContext);
+    const {alerta, mostrarAlerta} = alertaContext;
+
+    //Context de autorización
+    const authContext = useContext(AuthContext);
+    const { mensaje, autenticado, registrarUsuario } = authContext;
+
+    //En caso de que el usuario se haya autentificado o registrao o sea un registro duplicado
+    useEffect (()=> {
+        if(autenticado){
+            props.history.push('/proyectos')
+        }
+        if(mensaje){
+            mostrarAlerta(mensaje.msg, mensaje.categoria)
+        }
+
+        // eslint-disable-next-line
+    }, [mensaje, autenticado, props.history ]);
 
     //State para iniciar sesión
     const[usuario, guardarUsuario]  = useState({
@@ -16,8 +38,9 @@ const NuevaCuenta = () => {
     const onChange = e =>{
         guardarUsuario({
             ...usuario,
-            [e.target.name] : [e.target.value]
+            [e.target.name] : e.target.value
         });
+        console.log(nombre);
     }
 
     //Cuando el usuario quiere iniciar sesión
@@ -26,17 +49,37 @@ const NuevaCuenta = () => {
 
         //validar sin campos vacios
 
+        if(nombre.trim() ==='' ||
+            email.trim() ==='' ||
+            password.trim() ==='' ||
+            confirmar.trim() ==='' ){
+                mostrarAlerta('Todos los campos son obligatorios', 'alerta-error')
+                return;
+            }
 
         //Password mínimo de 6 caracteres
-
+        if(password.legth < 6 ){
+            mostrarAlerta('El password dber ser de al menos 6 caracteres', 'alerta-error')
+            return;
+        }    
 
         //Revisar que dos passwords sean iguales
-        
-        //asarlo al action
+        if(password !== confirmar){
+            mostrarAlerta('Los passwords no son iguales', 'alerta-error');
+            return;
+        }
+
+        //pasarlo al action
+        registrarUsuario({
+            nombre,
+            email,
+            password
+        });
     }
 
     return (
         <div className="form-usuario">
+           { alerta ? ( <div className={ `alerta ${alerta.categoria}` }>{alerta.msg}</div> )  : null}
             <div className="contenedor-form sombra-dark">
                 <h1>Crear una cuenta</h1>
                 <form onSubmit={onSubmit}

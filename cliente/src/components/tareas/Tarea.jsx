@@ -8,14 +8,14 @@ const Tarea = ({tarea}) => {
     const {proyecto} = proyectosContext;
 
     const tareasContext = useContext (tareaContext);
-    const {eliminarTarea, obtenerTareas,  cambiarEstadoTarea, guardarTareaActual } = tareasContext;
+    const {eliminarTarea, obtenerTareas, actualizarTarea, guardarTareaActual } = tareasContext;
 
     //extraer el proyecto
     const [proyectoActual] = proyecto;
 
     //Función que se ejecuta cuando el uusario presiona el btn de eliminar tarea
     const tareaEliminar = id =>{
-        eliminarTarea(id);
+        eliminarTarea(id, proyectoActual._id);
         obtenerTareas(proyectoActual.id);
     }
 
@@ -26,7 +26,7 @@ const Tarea = ({tarea}) => {
         } else{
             tarea.estado = true;
         }
-        cambiarEstadoTarea(tarea);
+        actualizarTarea(tarea);
     }
 
     //Agrega una tarea actual cuando el suuario desea editarla
@@ -73,7 +73,7 @@ const Tarea = ({tarea}) => {
                 <button
                     type="button"
                     className="btn btn-secundario" 
-                    onClick={()=> tareaEliminar(tarea.id)}>
+                    onClick={()=> tareaEliminar(tarea._id)}>
                     Eliminar
                 </button>
             </div>

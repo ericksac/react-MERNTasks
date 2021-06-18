@@ -21,4 +21,4 @@ const TareaSchema = mongoose.Schema({
 
 });
 
-module.ex = mongoose.model('Tarea', TareaSchema)
+module.exports = mongoose.model('Tarea', TareaSchema)

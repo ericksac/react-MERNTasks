@@ -2,15 +2,12 @@ const Proyecto = require('../models/Proyecto')
 const { validationResult } = require('express-validator');
 
 exports.crearProyecto = async (req, res) => {
-
     try {
-
         //Validar con express validator
         const errores = validationResult(req);
         if (!errores.isEmpty()) {
             return res.status(400).json({ errores: errores.array() });
         }
-
         //Crear un nuevo proyecto
         const proyecto = new Proyecto(req.body);
 
@@ -19,9 +16,8 @@ exports.crearProyecto = async (req, res) => {
 
         //guardar proyecto
         proyecto.save();
+      
         res.json(proyecto);
-
-
     } catch (error) {
         console.log(error);
         res.status(500).send('Hubo un error');
